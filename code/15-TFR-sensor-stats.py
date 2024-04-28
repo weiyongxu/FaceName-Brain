@@ -15,7 +15,7 @@ for subject_id in Ids:
     print("processing subject: %s" % subject)        
     fname=op.join(MEG_data_path,subject,'fname'+'_%02d'%(subject_id)+'_tsss_mc.fif')
                
-    tfr=mne.time_frequency.read_tfrs(fname.replace("_tsss_mc.fif", "_alt_rating_grouping-tfr.h5"))
+    tfr=mne.time_frequency.read_tfrs(fname.replace("_tsss_mc.fif", "_alt_rating_grouping_new_baseline-tfr.h5"))
     for tf in tfr: 
         if tf.comment in stats_conds_list:
             tfrs_all[tf.comment].append(tf) 
@@ -27,8 +27,8 @@ stat_kwargs=dict(n_permutations=1000, tail=0, stat_fun=stat_fun, n_jobs=50, seed
 ch_picks='grad'
 time_window=(0,None)
 
-for compare in stats_comparisions[0:1]:
+for compare in stats_comparisions:
     tfrs={k:v for k,v in tfrs_all.items() if k in compare}
     for band_name, band in bands.items():
-        stats_list_tfr=do_cluster_permutation_1samp_test(tfrs,ch_picks=ch_picks,results_folder=Results_data_path,time_window=time_window,freq_window=band,
+        stats_list_tfr=do_cluster_permutation_1samp_test(tfrs,ch_picks=ch_picks,results_folder=Results_data_path,time_window=time_window,freq_window=band,baseline=[-0.4,-0.2],
                                                         cluster_method=cluster_method,p_threshold_cluster=p_threshold_cluster,stats_test_name=band_name,**stat_kwargs)

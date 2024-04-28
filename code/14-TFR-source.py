@@ -12,7 +12,14 @@ src_fname = MRI_data_path+'/fsaverage/bem/fsaverage-ico-4-src.fif'
 src = mne.read_source_spaces(src_fname)
 
 bands = dict(theta=[4, 7],alpha=[8, 13],beta=[14, 30],gamma=[40, 90])
-n_cycles =5
+#n_cycles =5
+
+df=1
+freqs = np.concatenate(
+        [np.arange(band[0], band[1] + df / 2.0, df) for _, band in bands.items()]
+    )
+
+n_cycles = freqs / 2.  # different number of cycle per frequency
 
 for subject_id in Ids:
     
@@ -44,8 +51,8 @@ for subject_id in Ids:
             mne.epochs.equalize_epoch_counts(epo_li)
             for epo,cond in zip(epo_li,eq_conds):                
                 epo.subtract_evoked()
-                stcs =source_band_induced_power(epo, inv, bands=bands, n_cycles=n_cycles,n_jobs=5,baseline=(-0.2,0),baseline_mode='percent',decim=5)
+                stcs =source_band_induced_power(epo, inv, bands=bands, n_cycles=n_cycles,n_jobs=5,baseline=(-0.4,-0.2),baseline_mode='percent',decim=5)
                 for b, stc in stcs.items():
                     stc=stc.crop(-0.5,t_max-1)                
                     stc_fsaverage = mne.compute_source_morph(stc,subjects_dir=MRI_data_path,src_to=src,smooth=15).apply(stc)                
-                    stc_fsaverage.save(fname.replace("_tsss_mc.fif", '-%s-%s-%s_alt_rating_grouping' %(task,eq_cond_name(eq_conds,cond,join_name='_eq_'),b)), overwrite=True)       
+                    stc_fsaverage.save(fname.replace("_tsss_mc.fif", '-%s-%s-%s_alt_rating_grouping_new_baseline' %(task,eq_cond_name(eq_conds,cond,join_name='_eq_'),b)), overwrite=True)       

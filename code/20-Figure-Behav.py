@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from config_FaceName import MEG_data_path,group_name,Ids
 import scipy.stats as stats
+from statsmodels.stats.anova import AnovaRM
 sns.reset_defaults()
 
 def auroc2(accuracies:list, confidences:list, number_of_confidence_ratings:int) -> float:
@@ -134,9 +135,9 @@ fig.show()
 
 plt.savefig('figure1b.pdf')
 
-
-
-
+#mean and std of dprime2 and auroc2
+print(df_both[['dprime2','auroc2']].mean())
+print(df_both[['dprime2','auroc2']].std())
 
 df_list=[]
 for subject_id in Ids:
@@ -200,6 +201,17 @@ fig.tight_layout()
 fig.show()
 
 plt.savefig('figure1a.pdf')
+
+#RM ANOVA
+
+dvs=['correct','rating','RT_memory','RT_rating']
+for dv in dvs:
+    print('ANOVA for %s' % dv)
+    aov = AnovaRM(df_avg, dv, 'ID', within=['repeat']).fit()
+    print(aov)
+
+
+
 
 
 def find_SD_outliers(data, num_sd):

@@ -17,7 +17,7 @@ for subject_id in Ids:
     fname=op.join(MEG_data_path,subject,'fname'+'_%02d'%(subject_id)+'_tsss_mc.fif')
     for cond in stats_conds_list:
         for b in bands:
-            stcs_tfrs_all[cond+'_'+b].append(mne.read_source_estimate(fname.replace("_tsss_mc.fif", '-%s-%s-%s_alt_rating_grouping' %(cond[0].upper(),cond,b))))                
+            stcs_tfrs_all[cond+'_'+b].append(mne.read_source_estimate(fname.replace("_tsss_mc.fif", '-%s-%s-%s_alt_rating_grouping_new_baseline' %(cond[0].upper(),cond,b))))                
 
 cluster_method='tfce'
 p_threshold_cluster = 0.05

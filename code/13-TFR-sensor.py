@@ -9,7 +9,8 @@ from mne_bids import BIDSPath
 from custom_functions import eq_cond_name
 
 freqs = np.logspace(*np.log10([4, 90]), num=30)
-n_cycles =5 # fixed number of cycles    
+#n_cycles =5 # fixed number of cycles    
+n_cycles = freqs / 2.  # different number of cycle per frequency
 
 for subject_id in Ids:
     
@@ -44,4 +45,4 @@ for subject_id in Ids:
                 power.crop(-0.5,t_max-1)
                 tfrs.append(power)
       
-    mne.time_frequency.write_tfrs(fname.replace("_tsss_mc.fif", "_alt_rating_grouping-tfr.h5"),tfr=tfrs, overwrite=True)
+    mne.time_frequency.write_tfrs(fname.replace("_tsss_mc.fif", "_alt_rating_grouping_new_baseline-tfr.h5"),tfr=tfrs, overwrite=True)

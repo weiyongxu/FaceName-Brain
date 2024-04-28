@@ -1,3 +1,4 @@
+%matplotlib qt
 import mne
 from config_FaceName import Results_data_path,MRI_data_path,stats_comparisions
 import matplotlib.pyplot as plt
@@ -15,7 +16,8 @@ for compare in stats_comparisions:
         sig_times=print_sig_stats(stats_list_tfr,cluster_method,tfce_p_sig)
 
         if sig_times is not None:
-            vmax=np.abs(stats_list_tfr[0].copy().crop(tmin=sig_times[0],tmax=sig_times[-1]).data).max()
+            #vmax=np.abs(stats_list_tfr[0].copy().crop(tmin=sig_times[0],tmax=sig_times[-1]).data).max()
+            vmax=250
             sig_times_before=sig_times[sig_times<=0.5]
             sig_times_after=sig_times[sig_times>=0.5]
             # define sig_times as a list of sig_times_before and sig_times_after if both lists are not empty
